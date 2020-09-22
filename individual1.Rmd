@@ -1,0 +1,7 @@
+---
+title: "Lab3"
+author: "Tessa Mendoza"
+date: "9/22/2020"
+output: html_document
+---
+
