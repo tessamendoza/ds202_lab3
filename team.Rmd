@@ -4,15 +4,69 @@ author: "Tessa Mendoza and Becca Barrick"
 date: "9/27/2020"
 output: html_document
 ---
+```{r message=FALSE, warning=FALSE}
+dat <- readxl::read_xls('GSS.xls')
+library(tidyverse)
+```
 
-1) Find the average years of education for the respondents with each political party affiliation. Arrange your output in a meaningful order and print. Describe any patterns you find.
+**1) Find the average years of education for the respondents with each political party affiliation. Arrange your output in a meaningful order and print. Describe any patterns you find.**
 
-2) Create a single data frame containing records for the better educated respondents in each political party affiliation. A “better educated” respondent is someone who has strictly more years of education than the median in the same party affiliation. Print the structure of the data frame.
+```{r warning = FALSE}
+dat <- slice(dat, 1:(n()-2))
+dat <- dat %>% rename('education' = `Highest year of school completed`,
+                      'age' = `Age of respondent`, party = `Political party affiliation`, 'marriage' = `Marital status`)
 
-3) How is the happiness of a respondent related to his/her marriage status? Define that a person is happy if the response to question is “Very happy” or “Pretty happy”.
+dat <- dat %>%
+  mutate(education = as.numeric(education),
+         age = as.numeric(age)) %>%
+  mutate(party = factor(party))
 
-4) Does party affiliation affect the relationship you found in the last question?
+meanEdu <- dat %>%
+  filter(!is.na(education)) %>%
+  group_by(party) %>%
+  summarize(mean_education = mean(education)) %>%
+  arrange(desc(mean_education))
 
-5) How is marrital status related to the education of a respondent? What are possible reasons accounting for the patterns you see?
+meanEdu
+```
+While the mean number of years is similar between each political party group and ranges from 10-13 years, there is one noticable pattern: those who do not know their political party tend to have a lower amount of education (on average, through part of high school). This suggests that those with higher education tend to have a more distinguished indentification with a political party. 
 
-6) Explore two more interesting questions, and answer those questions using the GSS data.
+
+**2) Create a single data frame containing records for the better educated respondents in each political party affiliation. A “better educated” respondent is someone who has strictly more years of education than the median in the same party affiliation. Print the structure of the data frame.**
+```{r}
+betterEdu <- dat %>%
+  filter(!is.na(education)) %>%
+  group_by(party) %>%
+  filter(education > median(education, na.rm = TRUE)) %>%
+  ungroup()
+str(betterEdu)
+```
+
+
+**3) How is the happiness of a respondent related to his/her marriage status? Define that a person is happy if the response to question is “Very happy” or “Pretty happy”.**
+
+**4) Does party affiliation affect the relationship you found in the last question?**
+
+**5) How is marrital status related to the education of a respondent? What are possible reasons accounting for the patterns you see?**
+```{r}
+dat <- dat %>%
+  mutate(education = as.numeric(education),
+         age = as.numeric(age))
+
+dat <- dat %>%
+  mutate(party = factor(party)) %>%
+  mutate(marriage = factor(marriage))
+
+ 
+marry <- dat %>%
+  filter(!is.na(education)) %>%
+  group_by(marriage) %>%
+  summarize(mean_education = mean(education)) %>%
+  arrange(desc(mean_education))
+marry
+ggplot(marry, aes(x = marriage, y = mean_education)) + geom_bar(stat = 'identity')
+```
+There is a general relationship between marriage status and mean education. Never married, divorced, and married persons had a higher mean education status compared to separated and widowed persons. This could suggest that being widowed or separated are events that keep a person from continuing his or her education. Perhaps, separated and widowed people are more likely to be single parents, and therefore have to overcome higher obstacles to attend school.
+
+
+**6) Explore two more interesting questions, and answer those questions using the GSS data.**
