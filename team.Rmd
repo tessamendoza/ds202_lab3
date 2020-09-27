@@ -1,0 +1,18 @@
+---
+title: "Lab 3"
+author: "Tessa Mendoza and Becca Barrick"
+date: "9/27/2020"
+output: html_document
+---
+
+1) Find the average years of education for the respondents with each political party affiliation. Arrange your output in a meaningful order and print. Describe any patterns you find.
+
+2) Create a single data frame containing records for the better educated respondents in each political party affiliation. A “better educated” respondent is someone who has strictly more years of education than the median in the same party affiliation. Print the structure of the data frame.
+
+3) How is the happiness of a respondent related to his/her marriage status? Define that a person is happy if the response to question is “Very happy” or “Pretty happy”.
+
+4) Does party affiliation affect the relationship you found in the last question?
+
+5) How is marrital status related to the education of a respondent? What are possible reasons accounting for the patterns you see?
+
+6) Explore two more interesting questions, and answer those questions using the GSS data.
