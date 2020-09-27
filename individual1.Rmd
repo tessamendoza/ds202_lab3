@@ -13,16 +13,13 @@ library(tidyverse)
 1)
 ```{r warning=FALSE}
 dat <- slice(dat, 1:(n()-2))
-dat <- dat %>%
-  rename(party = `Political party affiliation`) %>%
-  mutate(party = factor(party))
-
 dat <- dat %>% rename('education' = `Highest year of school completed`,
-                      'age' = `Age of respondent`)
+                      'age' = `Age of respondent`, party = `Political party affiliation`, 'marriage' = `Marital status`)
 
 dat <- dat %>%
   mutate(education = as.numeric(education),
-         age = as.numeric(age))
+         age = as.numeric(age)) %>%
+  mutate(party = factor(party))
 
 meanEdu <- dat %>%
   filter(!is.na(education)) %>%
@@ -48,7 +45,6 @@ str(betterEdu)
 3)
 ```{r}
 happy <- dat %>%
-  rename(marriage = `Marital status`) %>%
   mutate(marriage = factor(marriage)) %>%
   rename(happy = `General happiness`) %>%
   #mutate(happy = factor(happy)) %>%
@@ -61,4 +57,26 @@ happytable <- happy %>%
 happytable
 ggplot(happy, aes(x = marriage)) + geom_bar()
 ```
-There is a general relationship between happiness and marriage status. As shown above,  
+
+
+5)
+```{r}
+dat <- dat %>%
+  mutate(education = as.numeric(education),
+         age = as.numeric(age))
+
+dat <- dat %>%
+  mutate(party = factor(party)) %>%
+  mutate(marriage = factor(marriage))
+
+ 
+marry <- dat %>%
+  filter(!is.na(education)) %>%
+  group_by(marriage) %>%
+  summarize(mean_education = mean(education)) %>%
+  arrange(desc(mean_education))
+marry
+ggplot(marry, aes(x = marriage, y = mean_education)) + geom_bar(stat = 'identity')
+```
+
+There is a general relationship between marriage status and mean education. Never married, divorced, and married persons had a higher mean education status compared to separated and widowed persons. This could suggest that being widowed or separated are events that keep a person from continuing his or her education. Perhaps, separated and widowed people are more likely to be single parents, and therefore have to overcome higher obstacles to attend school.
