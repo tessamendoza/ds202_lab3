@@ -14,7 +14,7 @@ library(tidyverse)
 ```{r warning = FALSE}
 dat <- slice(dat, 1:(n()-2))
 dat <- dat %>% rename('education' = `Highest year of school completed`,
-                      'age' = `Age of respondent`, party = `Political party affiliation`, 'marriage' = `Marital status`)
+                      'age' = `Age of respondent`, party = `Political party affiliation`, 'marriage' = `Marital status`, 'happy' = `General happiness`)
 
 dat <- dat %>%
   mutate(education = as.numeric(education),
@@ -33,7 +33,7 @@ While the mean number of years is similar between each political party group and
 
 
 **2) Create a single data frame containing records for the better educated respondents in each political party affiliation. A “better educated” respondent is someone who has strictly more years of education than the median in the same party affiliation. Print the structure of the data frame.**
-```{r}
+```{r, echo = FALSE}
 betterEdu <- dat %>%
   filter(!is.na(education)) %>%
   group_by(party) %>%
@@ -48,7 +48,7 @@ str(betterEdu)
 **4) Does party affiliation affect the relationship you found in the last question?**
 
 **5) How is marrital status related to the education of a respondent? What are possible reasons accounting for the patterns you see?**
-```{r}
+```{r, echo = FALSE}
 dat <- dat %>%
   mutate(education = as.numeric(education),
          age = as.numeric(age))
@@ -66,7 +66,26 @@ marry <- dat %>%
 marry
 ggplot(marry, aes(x = marriage, y = mean_education)) + geom_bar(stat = 'identity')
 ```
+
 There is a general relationship between marriage status and mean education. Never married, divorced, and married persons had a higher mean education status compared to separated and widowed persons. This could suggest that being widowed or separated are events that keep a person from continuing his or her education. Perhaps, separated and widowed people are more likely to be single parents, and therefore have to overcome higher obstacles to attend school.
 
 
 **6) Explore two more interesting questions, and answer those questions using the GSS data.**
+
+
+How is age related to happiness? 
+```{r, echo = FALSE}
+ageHappy <- dat %>%
+  mutate(happy = factor(happy)) %>%
+  filter(!is.na(age)) %>%
+  group_by(happy) %>%
+  summarize(mean_age = mean(age))
+ageHappy
+
+ageHappyPlot<- dat %>%
+  filter(!is.na(age))
+ggplot(ageHappyPlot, aes(x = happy, y = age)) + geom_boxplot()
+```
+
+
+As a whole, I found this plot to be very interesting. From this simple analysis, it seems as if there is not a strong correlation between age and happiness. In fact, the mean value is very similar across all happiness ratings. However, there is a slight increase in mean age for those who don't know how to rank their happiness. As shown in the boxplot, the range of values occurs at a higher age than the other happiness values. This suggests that younger people (under 30) are more strongly decisive in whether or not they are happy.
