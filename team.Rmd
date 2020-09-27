@@ -64,7 +64,10 @@ marry <- dat %>%
   summarize(mean_education = mean(education)) %>%
   arrange(desc(mean_education))
 marry
-ggplot(marry, aes(x = marriage, y = mean_education)) + geom_bar(stat = 'identity')
+dat <- dat %>%
+  filter(!is.na(education))
+ggplot(dat, aes(x = marriage, y = education)) + geom_boxplot() + stat_summary(fun.y = mean, geom = 'point', color = "red", size = 4)
+
 ```
 
 There is a general relationship between marriage status and mean education. Never married, divorced, and married persons had a higher mean education status compared to separated and widowed persons. This could suggest that being widowed or separated are events that keep a person from continuing his or her education. Perhaps, separated and widowed people are more likely to be single parents, and therefore have to overcome higher obstacles to attend school.
