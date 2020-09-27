@@ -5,3 +5,60 @@ date: "9/22/2020"
 output: html_document
 ---
 
+```{r message=FALSE, warning=FALSE}
+dat <- readxl::read_xls('GSS.xls')
+library(tidyverse)
+```
+
+1)
+```{r warning=FALSE}
+dat <- slice(dat, 1:(n()-2))
+dat <- dat %>%
+  rename(party = `Political party affiliation`) %>%
+  mutate(party = factor(party))
+
+dat <- dat %>% rename('education' = `Highest year of school completed`,
+                      'age' = `Age of respondent`)
+
+dat <- dat %>%
+  mutate(education = as.numeric(education),
+         age = as.numeric(age))
+
+meanEdu <- dat %>%
+  filter(!is.na(education)) %>%
+  group_by(party) %>%
+  summarize(mean_education = mean(education)) %>%
+  arrange(desc(mean_education))
+
+meanEdu
+```
+While the mean number of years is similar between each political party group and ranges from 10-13 years, there is one noticable pattern: those who do not know their political party tend to have a lower amount of education (on average, through part of high school). This suggests that those with higher education tend to have a more distinguished indentification with a political party. 
+
+
+2)
+```{r}
+betterEdu <- dat %>%
+  filter(!is.na(education)) %>%
+  group_by(party) %>%
+  filter(education > median(education, na.rm = TRUE)) %>%
+  ungroup()
+str(betterEdu)
+```
+
+3)
+```{r}
+happy <- dat %>%
+  rename(marriage = `Marital status`) %>%
+  mutate(marriage = factor(marriage)) %>%
+  rename(happy = `General happiness`) %>%
+  #mutate(happy = factor(happy)) %>%
+  filter(happy == "Very happy" | happy == "Pretty happy")
+
+happytable <- happy %>%
+  group_by(marriage) %>%
+  summarize(numberHappy = n()) %>%
+  arrange(desc(numberHappy))
+happytable
+ggplot(happy, aes(x = marriage)) + geom_bar()
+```
+There is a general relationship between happiness and marriage status. As shown above,  
