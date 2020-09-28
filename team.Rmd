@@ -33,7 +33,7 @@ While the mean number of years is similar between each political party group and
 
 
 **2) Create a single data frame containing records for the better educated respondents in each political party affiliation. A “better educated” respondent is someone who has strictly more years of education than the median in the same party affiliation. Print the structure of the data frame.**
-```{r, echo = FALSE}
+```{r}
 betterEdu <- dat %>%
   filter(!is.na(education)) %>%
   group_by(party) %>%
@@ -45,7 +45,7 @@ str(betterEdu)
 
 **3) How is the happiness of a respondent related to his/her marriage status? Define that a person is happy if the response to question is “Very happy” or “Pretty happy”.**
 
-```{r, echo = FALSE}
+```{r}
 happy <- dat %>%
   mutate(marriage = factor(marriage)) %>%
   filter(happy == "Very happy" | happy == "Pretty happy")
@@ -62,7 +62,7 @@ ggplot(happy, aes(x = happy, fill = marriage)) + geom_bar(position = 'fill')
 
 
 **4) Does party affiliation affect the relationship you found in the last question?**
-```{r, echo = FALSE}
+```{r}
 partyaff <- dat %>%
   group_by(party, marriage) %>%
   summarize(count = n()) %>%
@@ -79,7 +79,7 @@ ggplot(partyaffhappy, aes(x = party, fill = marriage)) + coord_flip() + geom_bar
 
 
 **5) How is marrital status related to the education of a respondent? What are possible reasons accounting for the patterns you see?**
-```{r, echo = FALSE}
+```{r}
 dat <- dat %>%
   mutate(education = as.numeric(education),
          age = as.numeric(age))
@@ -108,7 +108,7 @@ There is a general relationship between marriage status and mean education. Neve
 
 
 How is age related to happiness? 
-```{r, echo = FALSE}
+```{r}
 ageHappy <- dat %>%
   mutate(happy = factor(happy)) %>%
   filter(!is.na(age)) %>%
