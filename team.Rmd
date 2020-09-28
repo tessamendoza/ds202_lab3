@@ -56,9 +56,11 @@ happytable <- happy %>%
   arrange(desc(numberHappy))
 happytable
 
-ggplot(happy, aes(x = happy, fill = marriage)) + geom_bar(position = 'fill')
+ggplot(dat, aes(x = happy, fill = marriage)) + coord_flip() + geom_bar(position = 'fill')
 
 ```
+
+This graph shows an interesting spread of marriage status across happiness ratings. It is evident that there is a lesser distribution of happy divorced and separated people than not happy. Married people are generally spread across the board, as are married people. Finally, there is a much greater amount of separated people that "dont know" if they're happy than any others. Overall, this suggests that those with tough life events - divorced, widowed, and separated - identify as less happy than those who are married or have never been married. 
 
 
 **4) Does party affiliation affect the relationship you found in the last question?**
@@ -73,9 +75,18 @@ partyaff
 partyaffhappy <- dat %>%
   filter(happy == "Very happy" | happy == "Pretty happy")
 
-ggplot(partyaffhappy, aes(x = party, fill = marriage)) + coord_flip() + geom_bar(position = 'stack') + ggtitle("Party and Marriage Distribution Among Happy People")
+ggplot(partyaffhappy, aes(x = party, fill = marriage)) + coord_flip() + geom_bar(position = 'fill') + ggtitle("Party and Marriage Distribution Among Happy People")
+
+partyaffsad <- dat %>%
+  filter(!(happy == "Very happy" | happy == "Pretty happy"))
+
+ggplot(partyaffsad, aes(x = party, fill = marriage)) + coord_flip() + geom_bar(position = 'fill') + ggtitle("Party and Marriage Distribution Among Not Happy People")
 
 ```
+
+The first graph above shows party affiliation as it relates to marriage for happy people. In the graph above, we saw that happy people, as we define in the assignment, is distributed across each marriage type. Here, we see that there are minimal divorced people that don't know their party affiliation. Beyond that, the distribution of married, never married, and widowed people is even across party affiliation. 
+
+Again for not happy people, there is a large amount of separated and widowed people that do not know their party. Perhaps those going through tough life events, like these populations, do not have time, interest, or energy to involve themselves in politics. Also, we see that divorced people nearly always identify with a party. 
 
 
 **5) How is marrital status related to the education of a respondent? What are possible reasons accounting for the patterns you see?**
