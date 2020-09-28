@@ -78,16 +78,56 @@ There is a strong correlation between happiness and those who are married. Peopl
 
 Q4) Does party affiliation affect the relationship you found in the last question?
 ```{r, echo=FALSE}
+happy <- dat %>%
+  mutate(marriage = factor(marriage)) %>%
+  filter(happy == "Very happy" | happy == "Pretty happy")
 
+happytable <- happy %>%
+  group_by(marriage) %>%
+  summarize(numberHappy = n()) %>%
+  arrange(desc(numberHappy))
+happytable
 
+ggplot(happy, aes(x = happy, fill = marriage)) + geom_bar(position = 'fill')
 ```
+Married people report highest amounts of happiness. They are over twice as likely to be "Pretty happy" or "Very happy." Divorced, separated, and widowed people report similar amounts of happiness. The levels are relatively consistent with separated people least likely to be "Pretty happy" or "Very happy."
 
+Q5) How is marrital status related to the education of a respondent? What are possible reasons accounting for the patterns you see?
+```{r}
+dat <- dat %>%
+  mutate(education = as.numeric(education),
+         age = as.numeric(age))
+
+dat <- dat %>%
+  mutate(party = factor(party)) %>%
+  mutate(marriage = factor(marriage))
+
+ 
+marry <- dat %>%
+  filter(!is.na(education)) %>%
+  group_by(marriage) %>%
+  summarize(mean_education = mean(education)) %>%
+  arrange(desc(mean_education))
+marry
+dat <- dat %>%
+  filter(!is.na(education))
+ggplot(dat, aes(x = marriage, y = education)) + geom_boxplot() + stat_summary(fun.y = mean, geom = 'point', color = "red", size = 4)
+```
+There is a correlation between marital status and average years of education. Married and divorced people have the highest years of education. Perhaps this is because they take a traditional route of life by getting married, meaning they do other traditional things like going to college and even beyond.
 
 Q6) Explore two more interesting questions, and answer those questions using the GSS data. I will explore the relationship between income and happiness.
 ```{r, echo=FALSE}
-
-
-
+#dat <- dat %>%  rename('income' = 'Respondents income')
+#na.omit(income)
+#dat <- dat %>% mutate(income = as.numeric(income))
+#dat <- dat %>%
+  #filter(!is.na(income)) %>%
+  #group_by(dat$income) %>%
+  #summarize(numberHappiness = n()) %>%
+  #arrange(desc(numberHappiness))
+#ggplot(happiness, aes(x = income)) + geom_bar()
+```
+I was unable to complete this plot. Here is my work from what I attempted. I would assume that income and happiness have a positive relationship to a certain point and then happiness would level off or perhaps even decrease. 
 
 ```
 
