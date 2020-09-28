@@ -7,7 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 #install.packages('readxl')
-#dat <- readxl::read_xls('GSS.xls')
+dat <- readxl::read_xls('GSS.xls')
 #View(dat)
 ```
 
@@ -41,7 +41,7 @@ print(meanEdu)
 ```
 People with higher education tend to be republican. This varies between people who identify as strong, weak, or just near republican. This trend makes sense when considering the policies republicans support and that normally the upper class is the main benefactor of those policies.
 
-
+It is also interesting to note that the group of respondents indentifying that they "do not know" their political affiliation has a lower education average than the other groups. At under 11 years, this means that this group, on average, did not finish high school. Perhaps this indicates that those with lower education have less of a political opinion or are not educated on political happenings. -Tessa Mendoza
 
 Q2) Create a single data frame containing records for the better educated respondents in each political party affiliation. A “better educated” respondent is someone who has strictly more years of education than the median in the same party affiliation. Print the structure of the data frame.
 ```{r, echo=FALSE}
