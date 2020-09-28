@@ -134,3 +134,17 @@ ggplot(ageHappyPlot, aes(x = happy, y = age)) + geom_boxplot() + stat_summary(fu
 
 
 As a whole, I found this plot to be very interesting. From this simple analysis, it seems as if there is not a strong correlation between age and happiness. In fact, the mean value is very similar across all happiness ratings. However, there is a slight increase in mean age for those who don't know how to rank their happiness. As shown in the boxplot, the range of values occurs at a higher age than the other happiness values. This suggests that younger people (under 30) are more strongly decisive in whether or not they are happy.
+
+Income and happiness
+```{r}
+#dat <- dat %>%  rename('income' = 'Respondents income')
+#na.omit(income)
+#dat <- dat %>% mutate(income = as.numeric(income))
+#dat <- dat %>%
+  #filter(!is.na(income)) %>%
+  #group_by(dat$income) %>%
+  #summarize(numberHappiness = n()) %>%
+  #arrange(desc(numberHappiness))
+#ggplot(happiness, aes(x = income)) + geom_bar()
+```
+(Becca) I was unable to complete this plot. Here is my work from what I attempted. I would assume that income and happiness have a positive relationship to a certain point and then happiness would level off or perhaps even decrease. 
