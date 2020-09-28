@@ -45,7 +45,38 @@ str(betterEdu)
 
 **3) How is the happiness of a respondent related to his/her marriage status? Define that a person is happy if the response to question is “Very happy” or “Pretty happy”.**
 
+```{r, echo = FALSE}
+happy <- dat %>%
+  mutate(marriage = factor(marriage)) %>%
+  filter(happy == "Very happy" | happy == "Pretty happy")
+
+happytable <- happy %>%
+  group_by(marriage) %>%
+  summarize(numberHappy = n()) %>%
+  arrange(desc(numberHappy))
+happytable
+
+ggplot(happy, aes(x = happy, fill = marriage)) + geom_bar(position = 'fill')
+
+```
+
+
 **4) Does party affiliation affect the relationship you found in the last question?**
+```{r, echo = FALSE}
+partyaff <- dat %>%
+  group_by(party, marriage) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count))
+
+partyaff
+
+partyaffhappy <- dat %>%
+  filter(happy == "Very happy" | happy == "Pretty happy")
+
+ggplot(partyaffhappy, aes(x = party, fill = marriage)) + coord_flip() + geom_bar(position = 'stack') + ggtitle("Party and Marriage Distribution Among Happy People")
+
+```
+
 
 **5) How is marrital status related to the education of a respondent? What are possible reasons accounting for the patterns you see?**
 ```{r, echo = FALSE}
@@ -66,7 +97,7 @@ marry <- dat %>%
 marry
 dat <- dat %>%
   filter(!is.na(education))
-ggplot(dat, aes(x = marriage, y = education)) + geom_boxplot() + stat_summary(fun.y = mean, geom = 'point', color = "red", size = 4)
+ggplot(dat, aes(x = marriage, y = education)) + geom_boxplot() + stat_summary(fun = mean, geom = 'point', color = "red", size = 4)
 
 ```
 
@@ -87,7 +118,7 @@ ageHappy
 
 ageHappyPlot<- dat %>%
   filter(!is.na(age))
-ggplot(ageHappyPlot, aes(x = happy, y = age)) + geom_boxplot()
+ggplot(ageHappyPlot, aes(x = happy, y = age)) + geom_boxplot() + stat_summary(fun = mean, geom = 'point', color = "red", size = 4)
 ```
 
 
