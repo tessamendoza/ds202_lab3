@@ -1,22 +1,93 @@
 ---
-title: "individual2.Rmd"
+title: "Lab 3"
+author: "Becca Barrick"
+date: "9/27/2020"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-install.packages('readxl')
-dat <- readxl::read_xls('GSS.xls')
-View(dat)
+#install.packages('readxl')
+#dat <- readxl::read_xls('GSS.xls')
+#View(dat)
 ```
 
 
-```{r cars}
+Q1) Find the average years of education for the respondents with each political party affiliation. Arrange your output in a meaningful order and print. Describe any patterns you find.
+```{r, echo=FALSE}
+#install.packages("dplyr")
+#library(dplyr)
+str(dat)
+dat <- slice(dat, 1:(n()-2))
 
+dat <- dat %>%
+rename(party = 'Political party affiliation')  %>%
+mutate(party = factor(party))  
+
+table(dat$party)
+
+dat <- dat %>% rename('education' = 'Highest year of school completed', 
+                      'age' = 'Age of respondent')
+
+dat <- dat %>%
+  mutate(education = as.numeric(education), 
+         age = as.numeric(age))
+
+meanEdu <- dat %>%
+  filter(!is.na(education)) %>% 
+  group_by(party) %>% 
+  summarize(mean_education = mean(education)) %>% 
+  arrange(desc(mean_education))  
+print(meanEdu)
+```
+People with higher education tend to be republican. This varies between people who identify as strong, weak, or just near republican. This trend makes sense when considering the policies republicans support and that normally the upper class is the main benefactor of those policies.
+
+
+
+Q2) Create a single data frame containing records for the better educated respondents in each political party affiliation. A “better educated” respondent is someone who has strictly more years of education than the median in the same party affiliation. Print the structure of the data frame.
+```{r, echo=FALSE}
+medianEdu <- dat %>%
+  filter(!is.na(education)) %>% 
+  group_by(party) %>% 
+  summarize(median_education = median(education)) %>% 
+  arrange(desc(median_education))  
+print(medianEdu)
 ```
 
 
 
-```{r pressure, echo=FALSE}
+Q3) How is the happiness of a respondent related to his/her marriage status? Define that a person is happy if the response to question is “Very happy” or “Pretty happy”.
+```{r, echo=FALSE}
+happiness <- dat %>%
+  rename(happiness = 'General happiness') %>%
+  mutate(happiness, factor(happiness)) %>%
+  filter(happiness == 'Very happy' | happiness == 'Pretty happy') %>%
+  rename(status = 'Marital status') %>%
+  mutate(status, factor(status))
+
+install.packages("ggplot2")
+library(ggplot2)
+happiness1 <- happiness %>%
+  group_by(status) %>%
+  summarize(numberHappiness = n()) %>%
+  arrange(desc(numberHappiness))
+View(happiness1)  
+ggplot(happiness, aes(x = status)) + geom_bar()
+```
+There is a strong correlation between happiness and those who are married. People who are divorced, widowed, or never married have relatively similar amounts of responses who claim to be happy, and that amount is much less than half of married people who claimed to be happy. 
+
+
+Q4) Does party affiliation affect the relationship you found in the last question?
+```{r, echo=FALSE}
+
+
+```
+
+
+Q6) Explore two more interesting questions, and answer those questions using the GSS data. I will explore the relationship between income and happiness.
+```{r, echo=FALSE}
+
+
+
 
 ```
 
